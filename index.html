@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b12">
+  <meta name="description" content="A little note for Mishy — a small reminder that someone appreciates you.">
+  <title>A Little Note for Mishy</title>
+  <style>
+    :root {
+      --site-primary: #c5a46d;
+      --site-secondary: #171b2a;
+      --site-background: #090b12;
+      --site-on-primary: #111018;
+      --site-on-secondary: #f2e9dc;
+      --site-on-background: #f4eee5;
+      --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --site-font-heading: Georgia, "Times New Roman", serif;
+      --site-heading-scale: 1;
+      --site-spacing-scale: 1;
+      --site-radius-scale: 1;
+      --site-decoration-opacity: 1;
+      color-scheme: dark light;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100vh; background: var(--site-background); color: var(--site-on-background); font-family: var(--site-font-body); }
+    #app { min-height: 100vh; width: 100%; overflow: hidden; position: relative; background-color: var(--site-background); color: var(--site-on-background); isolation: isolate; }
+    .ambient { position: absolute; inset: 0; pointer-events: none; opacity: var(--site-decoration-opacity); z-index: -1; background: radial-gradient(ellipse at 50% 15%, rgba(90,103,145,.22), transparent 48%), radial-gradient(ellipse at 85% 75%, rgba(157,119,74,.10), transparent 38%), linear-gradient(180deg, #0c101c 0%, #090b12 65%, #0c0c12 100%); }
+    .stars, .stars::before, .stars::after { position: absolute; inset: 0; content: ""; pointer-events: none; opacity: var(--site-decoration-opacity); background-image: radial-gradient(1px 1px at 12% 18%, #fff 98%, transparent), radial-gradient(1px 1px at 76% 14%, #d9c69e 98%, transparent), radial-gradient(2px 2px at 89% 38%, #fff 98%, transparent), radial-gradient(1px 1px at 34% 68%, #fff 98%, transparent), radial-gradient(1px 1px at 62% 82%, #d9c69e 98%, transparent), radial-gradient(1px 1px at 22% 91%, #fff 98%, transparent); background-size: 370px 370px; animation: drift 32s linear infinite; }
+    .stars::before { transform: translateY(-30px); opacity: .45; animation-duration: 48s; }
+    @keyframes drift { to { transform: translateY(28px); } }
+    .wrap { width: min(100% - 36px, 920px); margin: 0 auto; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 27px 0; color: #c9c1b5; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark { width: 8px; height: 8px; border-radius: 50%; background: var(--site-primary); box-shadow: 0 0 16px var(--site-primary); }
+    .top-note { opacity: .7; }
+    main { min-height: calc(100vh - 90px); display: flex; align-items: center; justify-content: center; padding: 42px 0 76px; }
+    .hero { text-align: center; width: min(100%, 720px); animation: appear 1.2s ease both; }
+    @keyframes appear { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .eyebrow { color: var(--site-primary); font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; margin-bottom: 24px; }
+    h1 { font-family: var(--site-font-heading); font-weight: 400; font-size: clamp(3.2rem, 10vw, 6.5rem); line-height: .98; letter-spacing: -.045em; margin: 0; }
+    h1 span { color: var(--site-primary); font-style: italic; }
+    .intro { color: #b9b4b0; max-width: 510px; margin: 25px auto 0; line-height: 1.85; font-size: 1rem; }
+    .divider { width: 64px; height: 1px; background: linear-gradient(90deg, transparent, var(--site-primary), transparent); margin: 34px auto; }
+    button { font: inherit; cursor: pointer; }
+    .primary-btn { border: 1px solid rgba(197,164,109,.75); background: linear-gradient(135deg, #d7bd8e, #b38b53); color: #15131a; padding: 15px 25px; border-radius: 999px; letter-spacing: .08em; font-size: .78rem; text-transform: uppercase; transition: transform .25s ease, box-shadow .25s ease; box-shadow: 0 8px 35px rgba(197,164,109,.14); }
+    .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(197,164,109,.27); }
+    .primary-btn:focus-visible, .message-card:focus-visible { outline: 2px solid #f0d7a8; outline-offset: 4px; }
+    .hint { color: #777986; font-size: .78rem; margin-top: 17px; }
+    .hidden-area { display: none; margin: 48px auto 0; animation: appear .8s ease both; }
+    .hidden-area.visible { display: block; }
+    .section-label { color: var(--site-primary); font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; margin-bottom: 18px; }
+    .message-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; }
+    .message-card { min-height: 116px; padding: 19px 13px; border: 1px solid rgba(197,164,109,.22); border-radius: 14px; background: rgba(23,27,42,.72); color: #eee6da; transition: border-color .25s, transform .25s, background .25s; }
+    .message-card:hover { transform: translateY(-4px); border-color: rgba(197,164,109,.7); background: rgba(36,39,54,.88); }
+    .message-card .number { display: block; color: var(--site-primary); font-size: .68rem; letter-spacing: .18em; margin-bottom: 12px; }
+    .message-card .prompt { font-family: var(--site-font-heading); font-size: 1.05rem; }
+    .reveal { min-height: 28px; color: #d7c6a7; font-family: var(--site-font-heading); font-style: italic; font-size: 1.1rem; line-height: 1.6; margin: 19px auto 0; max-width: 520px; }
+    .letter { display: none; max-width: 590px; margin: 34px auto 0; padding: 30px clamp(20px, 5vw, 42px); text-align: left; border: 1px solid rgba(197,164,109,.27); border-radius: 18px; background: linear-gradient(145deg, rgba(26,29,43,.94), rgba(17,19,29,.94)); box-shadow: 0 20px 70px rgba(0,0,0,.25); animation: appear .8s ease both; }
+    .letter.visible { display: block; }
+    .letter .salutation { color: var(--site-primary); font-family: var(--site-font-heading); font-size: 1.45rem; margin-bottom: 16px; }
+    .letter p { color: #d0c9c0; line-height: 1.9; font-size: .96rem; margin: 0 0 15px; }
+    .signature { color: var(--site-primary); font-family: var(--site-font-heading); font-style: italic; margin-top: 22px; }
+    .closing { color: #777986; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; margin-top: 42px; }
+    .spark { position: fixed; pointer-events: none; color: var(--site-primary); animation: floatUp 1.8s ease-out forwards; z-index: 5; }
+    @keyframes floatUp { from { opacity: 0; transform: translateY(0) scale(.6) rotate(0); } 15% { opacity: 1; } to { opacity: 0; transform: translateY(-130px) scale(1.25) rotate(35deg); } }
+    @media (max-width: 600px) { header { padding: 21px 0; } .top-note { display: none; } main { padding-top: 25px; } .message-grid { grid-template-columns: 1fr; } .message-card { min-height: 84px; } .message-card .number { display: inline; margin-right: 8px; } .letter { padding: 25px 21px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="ambient" aria-hidden="true"></div><div class="stars" aria-hidden="true"></div>
+    <div class="wrap">
+      <header><div class="brand"><span class="brand-mark"></span><span>A small something</span></div><div class="top-note">A note meant for one person</div></header>
+      <main>
+        <section class="hero" aria-labelledby="title">
+          <div class="eyebrow">A little pause in your day</div>
+          <h1 id="title">For you,<br><span>Mishy.</span></h1>
+          <p class="intro">Some people make ordinary moments feel a little less ordinary. This is a small note for one of them.</p>
+          <div class="divider"></div>
+          <button class="primary-btn" id="openBtn">Open your little surprise <span aria-hidden="true">↗</span></button>
+          <div class="hint">Take your time. There is no rush.</div>
+          <div class="hidden-area" id="hiddenArea">
+            <div class="divider"></div>
+            <div class="section-label">Three little things to uncover</div>
+            <div class="message-grid">
+              <button class="message-card" data-message="You have a way of making a simple day feel brighter. Never underestimate that." aria-label="Reveal hidden message one"><span class="number">NOTE 01</span><span class="prompt">A little brightness ✧</span></button>
+              <button class="message-card" data-message="Your presence is appreciated more than these few words can properly say." aria-label="Reveal hidden message two"><span class="number">NOTE 02</span><span class="prompt">Something worth knowing ✧</span></button>
+              <button class="message-card" data-message="Keep being wonderfully, unmistakably yourself. That is already something special." aria-label="Reveal hidden message three"><span class="number">NOTE 03</span><span class="prompt">One last thought ✧</span></button>
+            </div>
+            <div class="reveal" id="reveal" aria-live="polite">Choose a note. Each one has a little thought inside.</div>
+            <div style="margin-top:28px"><button class="primary-btn" id="letterBtn">There's one more thing</button></div>
+            <article class="letter" id="letter">
+              <div class="salutation">Dear Mishy,</div>
+              <p>I wanted to make you something a little different, just to remind you that you are appreciated.</p>
+              <p>I think there's something lovely about the way certain people can bring a bit of light into an ordinary day without even trying. You have that kind of presence.</p>
+              <p>I'm not expecting anything from this note. I simply wanted to be honest and let you know that I think you're pretty special. I hope life gives you plenty of reasons to smile, today and always.</p>
+              <p class="signature">A little note, with good thoughts.</p>
+            </article>
+            <div class="closing">Made with a little thought · just for Mishy</div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script>
+    const openBtn = document.getElementById('openBtn');
+    const hiddenArea = document.getElementById('hiddenArea');
+    const reveal = document.getElementById('reveal');
+    const letterBtn = document.getElementById('letterBtn');
+    const letter = document.getElementById('letter');
+
+    function makeSparkles() {
+      const symbols = ['✦', '✧', '·', '✶'];
+      for (let i = 0; i < 14; i++) {
+        const spark = document.createElement('span');
+        spark.className = 'spark';
+        spark.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        spark.style.left = `${12 + Math.random() * 76}%`;
+        spark.style.top = `${45 + Math.random() * 35}%`;
+        spark.style.fontSize = `${10 + Math.random() * 13}px`;
+        spark.style.animationDelay = `${Math.random() * .35}s`;
+        document.body.appendChild(spark);
+        spark.addEventListener('animationend', () => spark.remove());
+      }
+    }
+
+    openBtn.addEventListener('click', () => {
+      hiddenArea.classList.add('visible');
+      openBtn.textContent = 'Your surprise is open ✦';
+      openBtn.disabled = true;
+      openBtn.style.opacity = '.65';
+      makeSparkles();
+      hiddenArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    document.querySelectorAll('.message-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        reveal.textContent = card.dataset.message;
+        makeSparkles();
+      });
+    });
+
+    letterBtn.addEventListener('click', () => {
+      letter.classList.add('visible');
+      letterBtn.textContent = 'A note just for you ✦';
+      letterBtn.disabled = true;
+      letterBtn.style.opacity = '.65';
+      makeSparkles();
+      letter.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  </script>
+</body>
+</html>
